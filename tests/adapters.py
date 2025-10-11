@@ -5,7 +5,7 @@ from typing import Type
 import torch
 import torch.distributed as dist
 
-# from cs336_systems.flash_attention import FlashAttnAutogradFunction, TritonFlashAttentionAutogradFunction
+from cs336_systems.flash_attention import FlashAttnAutogradFunction, TritonFlashAttentionAutogradFunction
 from cs336_systems.ddp_model import DDPIndividualParameters, BucketDDPIndividualParameters
 from cs336_systems.optimizer_share import OptimizerStateShare
 
@@ -20,7 +20,7 @@ def get_flashattention_autograd_function_pytorch() -> Type:
         A class object (not an instance of the class)
     """
     # For example: return MyFlashAttnAutogradFunctionClass
-    # return FlashAttnAutogradFunction
+    return FlashAttnAutogradFunction
 
 
 def get_flashattention_autograd_function_triton() -> Type:
@@ -36,7 +36,7 @@ def get_flashattention_autograd_function_triton() -> Type:
         A class object (not an instance of the class)
     """
     # For example: return MyTritonFlashAttentionAutogradFunctionClass
-    # return TritonFlashAttentionAutogradFunction
+    return TritonFlashAttentionAutogradFunction
 
 
 def get_ddp_individual_parameters(module: torch.nn.Module) -> torch.nn.Module:
@@ -141,4 +141,4 @@ def get_sharded_optimizer(params, optimizer_cls: type, **kwargs) -> torch.optim.
     Returns:
         Instance of sharded optimizer.
     """
-    return  OptimizerStateShare(params, optimizer_cls, **kwargs)
+    return OptimizerStateShare(params, optimizer_cls, **kwargs)
