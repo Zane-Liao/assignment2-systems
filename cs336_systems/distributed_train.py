@@ -6,7 +6,10 @@ GPU: NVIDIA-GPU PCIE X 4
 device: GPU0 GPU1 GPU2 GPU3
 Shell: bash
 Improvement: torch.compile() FlashAttention DDP OptimizerStateShare
-Our Impl: Use torch.nn.parallel.DistributedDataParallel
+Our Impl: Use torch.nn.parallel.DistributedDataParallel...
+
+TODO: I only used a single rtx4090 and did not write a distributed strategy.
+I will complete this after I reduce the loss to below 3.3.
 """
 # ass1
 import os
