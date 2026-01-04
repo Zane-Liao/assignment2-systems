@@ -187,7 +187,7 @@ class TritonFlashAttentionAutogradFunction(torch.autograd.Function):
         Q_TILE_SIZE = 32
         K_TILE_SIZE = 32
         
-        T_q = (NQ + Q_TILE_SIZE - 1) // Q_TILE_SIZE
+        T_q = NQ // Q_TILE_SIZE
 
         O = torch.zeros_like(Q)
         L = torch.zeros((B * NQ), device=Q.device, dtype=torch.float32)
@@ -218,12 +218,12 @@ class TritonFlashAttentionAutogradFunction(torch.autograd.Function):
         Q, K, V, O, L = ctx.saved_tensors
         is_causal = ctx.is_causal
         
+        B, NQ, d = Q.shape
+        NK = K.shape
+        
         scale = 1.0 / (d ** 0.5)
         Q_TILE_SIZE = 32
         K_TILE_SIZE = 32
-        
-        B, NQ, d = Q.shape
-        NK = K.shape
         
         dQ = torch.zeros_like(Q)
         dK = torch.zeros_like(K)
@@ -231,7 +231,7 @@ class TritonFlashAttentionAutogradFunction(torch.autograd.Function):
         
         D = torch.sum(dO * O, dim=-1, keepdim=True)
         
-        T_k = (NK + K_TILE_SIZE - 1) // K_TILE_SIZE
+        T_k = NK // K_TILE_SIZE
         
         grid = (T_k, B)
         flash_bwd_kernel[grid](
