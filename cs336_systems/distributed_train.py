@@ -32,10 +32,9 @@ from cs336_basics.modules.optimizer import SGD, AdamW, compute_lr, gradient_clip
 from torch.utils.tensorboard import SummaryWriter
 # ass2
 from tokenizers import Tokenizer as HFTokenizer
-from init_weights import init_weights
 # Only Test
 import wandb
-from ddp_model import DDPIndividualParameters
+from ddp_model import DDPIndividualParameters, BucketDDPIndividualParameters
 from optimizer_share import OptimizerStateShare
 import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
@@ -70,7 +69,6 @@ def train():
     print(f"Tokenizer loaded. Vocab size: {model_args['vocab_size']}")
     
     model = torch.compile(TransformerLM(**model_args)).to(device)
-    init_weights(model)
     print(f"Model created with {model.get_num_params():,} parameters.")
     
     optimizer = AdamW(model.parameters(), lr=training_args['learning_rate'])
