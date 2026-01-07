@@ -46,7 +46,32 @@ def flash_benchmarking():
     
     print("flash_attention2 with Triton forward and torch backward Impl...")
     testing.do_bench(lambda: half_triton_flash_attn(q, k, v))
+
+    
+def flash_forward_backward():
+    n_heads = 16
+
+    d_head = 64
+    
+    sequence_length = 16384
+    
+    q, k, v = torch.randn(
+        3, n_heads, sequence_length, d_head, device='cuda', dtype=torch.bfloat16, requires_grad=True
+    )
+    
+    flash = torch.compile(TritonFlashAttentionAutogradFunction.apply)
+    
+    o = flash(q, k, v, True)
+    
+    loss = o.sum()
+    
+    loss.backward()
+    
+    results = triton.testing.do_bench(flash_forward_backward, rep=10000, warmup=1000)
+
+    print(results)
     
 
 if __name__ == "__main__":
     flash_benchmarking()
+    flash_forward_backward()

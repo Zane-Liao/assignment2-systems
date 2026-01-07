@@ -570,7 +570,6 @@ def flash_bwd_kernel(
     dQ_block_ptr = tl.make_block_ptr(
         dQ_ptr + batch_index * stride_qb,
         shape=(N_QUERIES, D),
-        shape=(N_QUERIES, D),
         strides=(stride_qq, stride_qd),
         offsets=(0, 0),
         block_shape=(Q_TILE_SIZE, D),
