@@ -24,6 +24,7 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 include = ["cs336_basics"]
+where = ["cs336_basics"]
 
 
 [tool.uv]

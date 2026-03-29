@@ -152,3 +152,5 @@ def gradient_cliping(parameters: Iterable[Parameter], max_l2_norm: float, epsilo
             if p.grad is None:
                 continue
             p.grad.data.mul_(scale)
+
+    return total_norm
