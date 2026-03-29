@@ -1,22 +1,23 @@
 model_args:
-  vocab_size: 10000
-  context_length: 256
-  d_model: 512
-  num_layers: 4
-  num_heads: 16
-  d_ff: 1344
+  vocab_size: 32000
+  context_length: 512
+  d_model: 768
+  num_layers: 12
+  num_heads: 8
+  d_ff: 3072
   rope_theta: 10000.0
 
 training_args:
   device: "cuda" # Train device, If you have GPU, Please Change to "cuda" else "cpu"
-  batch_size: 768
-  num_epochs: 5
-  learning_rate: 0.0003
-  max_iters: 50000
+  batch_size: 256
+  grad_accum_steps: 16
+  num_epochs: 2
+  learning_rate: 0.0006
+  max_iters: 25000
   eval_interval: 1000
   warmup_steps: 200
-  lr_decay_steps: 30000
-  min_lr: 3.0e-6
+  lr_decay_steps: 21000
+  min_lr: 6.0e-5
   gradient_clip_val: 1.0
 
   use_torch_compile: True
@@ -25,19 +26,19 @@ training_args:
   grad_accum_steps: 1
   eval_max_iters: 100
   log_interval: 10
-  tensorboard_logdir: "runs/llm_run"
-  use_wandb: False
+  tensorboard_logdir: "/app/cs336_systems/data/runs"
+  use_wandb: True
   wandb_project: "runs/llm_project"
-  wandb_run_name: h100
+  wandb_run_name: b200
   init_std: 0.02
   seed: 42
   cudnn_benchmark: True
   cudnn_deterministic: False
 
 data_args:
-  train_data_path: "data/train.bin"
-  valid_data_path: "data/valid.bin"
-  vocab_path: "tokenizer/vocab_train.json"
-  merges_path: "tokenizer/merges.txt"
-  checkpoint_dir: "checkpoints"
+  train_data_path: "/app/cs336_systems/data/train.bin"
+  valid_data_path: "/app/cs336_systems/data/valid.bin"
+  vocab_path: "/app/cs336_systems/tokenizer/vocab_train.json"
+  merges_path: "/app/cs336_systems/tokenizer/merges.txt"
+  checkpoint_dir: "/app/cs336_systems/data/checkpoints"
   resume_from_checkpoint: False

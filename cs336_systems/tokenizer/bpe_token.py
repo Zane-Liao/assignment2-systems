@@ -8,8 +8,8 @@ import json
 from tokenizers import Tokenizer, models, trainers, pre_tokenizers
 import sys
 
-input_corpus_path = "../data/owt_train.txt"
-vocab_size = 10000
+input_corpus_path = "data/owt_train.txt"
+vocab_size = 32000
 output_dir = "vocab"
 os.makedirs(output_dir, exist_ok=True)
 
@@ -21,7 +21,7 @@ def pre_check():
     print("=" * 70)
     print("🔍 Pre-training Checks")
     print("=" * 70)
-    
+
     if not os.path.exists(input_corpus_path):
         print(f"❌ ERROR: Input file not found: {input_corpus_path}")
         print(f"   Current directory: {os.getcwd()}")
@@ -29,10 +29,10 @@ def pre_check():
         sys.exit(1)
     else:
         print(f"✅ Input file exists: {input_corpus_path}")
-    
+
     file_size_gb = os.path.getsize(input_corpus_path) / (1024**3)
     print(f"✅ File size: {file_size_gb:.2f} GB")
-    
+
     try:
         with open(input_corpus_path, 'r', encoding='utf-8') as f:
             first_line = f.readline()
@@ -43,7 +43,7 @@ def pre_check():
     except Exception as e:
         print(f"❌ ERROR: Cannot read file: {e}")
         sys.exit(1)
-    
+
     print("📊 Sampling file (counting ~1% of lines)...")
     try:
         with open(input_corpus_path, 'r', encoding='utf-8') as f:
@@ -55,39 +55,39 @@ def pre_check():
                 if line.strip():
                     sample_lines += 1
                     total_chars += len(line)
-        
+
         avg_chars = total_chars / sample_lines if sample_lines > 0 else 0
         print(f"✅ Sample: {sample_lines:,} lines, avg {avg_chars:.1f} chars/line")
 
         estimated_total_lines = int(file_size_gb * 1024**3 / avg_chars) if avg_chars > 0 else 0
         print(f"📈 Estimated total lines: ~{estimated_total_lines:,}")
-        
+
     except Exception as e:
         print(f"⚠️  Sampling failed: {e}")
-    
+
     print()
 
 if __name__ == "__main__":
     pre_check()
-    
+
     print("=" * 70)
     print("🚀 Begin Training BPE Tokenizer")
     print("=" * 70)
     print(f"📁 Corpus: {input_corpus_path}")
     print(f"🎯 Target vocab size: {vocab_size:,}")
     print()
-    
+
     print("1️⃣  Initializing BPE model...")
     tokenizer = Tokenizer(models.BPE(unk_token="<UNK>"))
     print("   ✅ Model initialized")
-    
+
     print("2️⃣  Setting pre-tokenizer...")
 
     tokenizer.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)
     print("   ✅ Pre-tokenizer set (ByteLevel)")
-    
+
     print("3️⃣  Setting up trainer...")
-    special_tokens = ["<PAD>", "<UNK>", "<BOS>", "<EOS>"]
+    special_tokens = ["<|endoftext|>"]
     trainer = trainers.BpeTrainer(
         vocab_size=vocab_size,
         show_progress=True,
@@ -96,10 +96,10 @@ if __name__ == "__main__":
     )
     print(f"   ✅ Trainer configured")
     print(f"   Special tokens: {special_tokens}")
-    
+
     print("\n4️⃣  Training tokenizer (this may take a while for 11GB file)...")
     print("   ⏳ Please wait...\n")
-    
+
     try:
         tokenizer.train([input_corpus_path], trainer)
         print("\n   ✅ Training completed!")
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     actual_vocab_size = len(vocab)
     print(f"   Target vocab size: {vocab_size:,}")
     print(f"   Actual vocab size: {actual_vocab_size:,}")
-    
+
     if actual_vocab_size < 100:
         print(f"   ❌ ERROR: Vocab size too small ({actual_vocab_size})!")
         print(f"   This indicates training failed.")
@@ -132,27 +132,27 @@ if __name__ == "__main__":
     print("\n6️⃣  Saving tokenizer...")
     tokenizer.save(output_tokenizer_path)
     print(f"   ✅ Saved to: {output_tokenizer_path}")
-    
+
     print("7️⃣  Saving vocabulary...")
     with open(output_vocab_path, 'w', encoding='utf-8') as f:
         for token, id_ in sorted(vocab.items(), key=lambda x: x[1]):
             f.write(f"{token}\t{id_}\n")
     print(f"   ✅ Saved to: {output_vocab_path} ({len(vocab):,} tokens)")
-    
+
     print("8️⃣  Extracting and saving merges...")
     try:
         with open(output_tokenizer_path, 'r', encoding='utf-8') as f:
             tokenizer_data = json.load(f)
-        
+
         if 'model' in tokenizer_data and 'merges' in tokenizer_data['model']:
             merges_list = tokenizer_data['model']['merges']
-            
+
             if merges_list:
                 with open(output_merges_path, 'w', encoding='utf-8') as f:
                     f.write("#version: 0.2\n")
                     for merge_str in merges_list:
                         f.write(f"{merge_str}\n")
-                
+
                 print(f"   ✅ Saved to: {output_merges_path} ({len(merges_list):,} merges)")
             else:
                 print("   ⚠️  No merges found (vocab might only contain base characters)")
@@ -160,27 +160,27 @@ if __name__ == "__main__":
             print("   ⚠️  No merges field in tokenizer.json")
     except Exception as e:
         print(f"   ⚠️  Failed to save merges: {e}")
-    
+
     print("\n9️⃣  Testing tokenizer...")
     test_texts = [
         "Hello world! This is a test.",
         "The quick brown fox jumps over the lazy dog.",
         "Machine learning and natural language processing."
     ]
-    
+
     print("   Test samples:")
     for i, text in enumerate(test_texts, 1):
         encoded = tokenizer.encode(text)
         print(f"\n   Test {i}: '{text}'")
         print(f"   Tokens ({len(encoded.tokens)}): {encoded.tokens[:15]}")
         print(f"   IDs: {encoded.ids[:15]}")
-        
+
         decoded = tokenizer.decode(encoded.ids)
         if decoded.strip() == text.strip():
             print(f"   ✅ Decode OK")
         else:
             print(f"   ⚠️  Decode mismatch: '{decoded}'")
-    
+
     print("\n" + "=" * 70)
     print("🎉 Tokenizer Training Complete!")
     print("=" * 70)
