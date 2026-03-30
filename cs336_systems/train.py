@@ -183,7 +183,7 @@ def train_loop():
     if use_wandb:
         wandb.init(
             entity='lzq666amn-github',
-            project="B200-40000-1",
+            project="B200",
             config={**model_args},
         )
 

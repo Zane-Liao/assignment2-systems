@@ -10,7 +10,7 @@ from einops import rearrange
 from dataclasses import dataclass
 from .activation import Softmax, silu, scaled_dot_product_attention
 from jaxtyping import Float, Int
-from cs336_systems.flash_attention import FlashAttnAutogradFunction, TritonFlashAttentionAutogradFunction
+from cs336_systems.flash_attention import FlashAttnAutogradFunction, FlashTritonForwardAttnAutogradFunction, TritonFlashAttentionAutogradFunction
 
 __all__ = [
     "Embedding",
@@ -289,6 +289,8 @@ class FlashAttention(Module):
         k = rearrange(k, "b h t d -> (b h) t d").contiguous()
         v = rearrange(v, "b h t d -> (b h) t d").contiguous()
 
+        # output = FlashAttnAutogradFunction.apply(q, k, v, True)
+        # output = FlashTritonForwardAttnAutogradFunction.apply(q, k, v, True)
         output = TritonFlashAttentionAutogradFunction.apply(q, k, v, True)
 
         output = rearrange(output, "(b h) t d -> b h t d", b=batch_size, h=self.num_heads)

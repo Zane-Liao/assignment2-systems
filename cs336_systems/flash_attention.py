@@ -9,6 +9,7 @@ import triton.language as tl
 
 __all__ = [
     "FlashAttnAutogradFunction",
+    "FlashTritonForwardAttnAutogradFunction",
     "TritonFlashAttentionAutogradFunction",
 ]
 
@@ -187,6 +188,68 @@ def torch_flash_bwd(ctx, dO, Q, K, V, O, L, is_causal=None):
             # End for
         
     return dQ, dK, dV
+
+
+class FlashTritonForwardAttnAutogradFunction(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, Q, K, V, is_causal=False):
+        assert Q.ndim == K.ndim == V.ndim == 3
+        assert Q.shape == K.shape == V.shape
+
+        B, NQ, D = Q.shape
+        NK = K.shape[1]
+        D_PAD = next_power_of_2(D)
+        scale = 1.0 / math.sqrt(D)
+
+        Q_TILE = 32
+        K_TILE = 32
+
+        O = torch.empty((B, NQ, D), device=Q.device, dtype=torch.float32)
+        LSE = torch.empty((B, NQ), device=Q.device, dtype=torch.float32)
+
+        grid = (triton.cdiv(NQ, Q_TILE), B)
+
+        flash_fwd_kernel[grid](
+            Q_ptr=Q,
+            K_ptr=K,
+            V_ptr=V,
+            O_ptr=O,
+            LSE_ptr=LSE,
+            stride_qb=Q.stride(0),
+            stride_qq=Q.stride(1),
+            stride_qd=Q.stride(2),
+            stride_kb=K.stride(0),
+            stride_kk=K.stride(1),
+            stride_kd=K.stride(2),
+            stride_vb=V.stride(0),
+            stride_vk=V.stride(1),
+            stride_vd=V.stride(2),
+            stride_ob=O.stride(0),
+            stride_oq=O.stride(1),
+            stride_od=O.stride(2),
+            stride_lsb=LSE.stride(0),
+            stride_lsq=LSE.stride(1),
+            N_QUERIES=NQ,
+            N_KEYS=NK,
+            scale=scale,
+            D=D,
+            D_PAD=D_PAD,
+            Q_TILE_SIZE=Q_TILE,
+            K_TILE_SIZE=K_TILE,
+            is_causal=bool(is_causal),
+        )
+
+        ctx.save_for_backward(Q, K, V, O, LSE)
+        ctx.is_causal = bool(is_causal)
+        return O.to(Q.dtype)
+    
+    @staticmethod
+    def backward(ctx, dO):
+        Q, K, V, O, L = ctx.saved_tensors
+        is_causal = ctx.is_causal
+        dQ, dK, dV = torch_flash_bwd(ctx, dO, Q, K, V, O, L, is_causal=is_causal)
+        return dQ, dK, dV, None
+
 
 def next_power_of_2(x):
     return 1 << (x - 1).bit_length()
