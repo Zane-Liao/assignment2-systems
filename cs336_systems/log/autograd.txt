@@ -1,0 +1,12 @@
+Saving residual: shape=torch.Size([4, 512, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 512, 1]), dtype=torch.float32, grad_fn=<RsqrtBackward0 object at 0x107f57520>
+Saving residual: shape=torch.Size([4, 512, 1]), dtype=torch.float32, grad_fn=<RsqrtBackward0 object at 0x107f57520>
+Saving residual: shape=torch.Size([4, 512, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 512, 2560]), dtype=torch.float32, grad_fn=<MulBackward0 object at 0x107f57520>
+Saving residual: shape=torch.Size([2560]), dtype=torch.float32, grad_fn=None
+Loading residual: shape=torch.Size([4, 512, 2560]), dtype=torch.float32, grad_fn=<MulBackward0 object at 0x107f574f0>
+Loading residual: shape=torch.Size([2560]), dtype=torch.float32, grad_fn=None
+Loading residual: shape=torch.Size([4, 512, 1]), dtype=torch.float32, grad_fn=<RsqrtBackward0 object at 0x107f574f0>
+Loading residual: shape=torch.Size([4, 512, 2560]), dtype=torch.float32, grad_fn=None
+Loading residual: shape=torch.Size([4, 512, 1]), dtype=torch.float32, grad_fn=<RsqrtBackward0 object at 0x107f574f0>
+Loading residual: shape=torch.Size([4, 512, 2560]), dtype=torch.float32, grad_fn=None

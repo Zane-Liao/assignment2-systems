@@ -139,7 +139,7 @@ def train_loop():
     print(f"Model created with {num_params:,} parameters.")
 
     """Optimizer/Loss"""
-    optimizer = AdamW(model.parameters(), lr=training_args['learning_rate'])
+    optimizer = AdamW(model.parameters(), lr=training_args['learning_rate'], betas=(0.9, 0.95))
     loss_fn = CrossEntropyLoss()
 
     """Checkpoint resume"""
@@ -169,7 +169,7 @@ def train_loop():
     use_amp = training_args.get('use_amp', True) and device.type == 'cuda'
     amp_dtype = torch.bfloat16 if use_amp else None
     if use_amp:
-        print("Enabled Mixed Precision (AMP) with torch.bfloat16 for Hopper Architecture.")
+        print("Enabled Mixed Precision (AMP) with torch.bfloat16 for --Hoper/Blackwell-- Architecture.")
     amp_context = torch.amp.autocast('cuda', dtype=amp_dtype) if use_amp else torch.autocast('cpu', enabled=False)
 
     """Data"""
@@ -183,7 +183,7 @@ def train_loop():
     if use_wandb:
         wandb.init(
             entity='lzq666amn-github',
-            project="B200",
+            project="h100SXM",
             config={**model_args},
         )
 
@@ -217,17 +217,29 @@ def train_loop():
     grad_accum_steps = training_args.get('grad_accum_steps', 1)
     max_iters = training_args['max_iters']
     t0 = time.time()
+    start_time = time.time()
 
-    print("--- Starting Training Loop ---")
+    warmup_steps = training_args.get('warmup_steps', 500)
+    decay_start = training_args.get('lr_decay_starting_step', warmup_steps)
+    lr_decay_steps = training_args.get('lr_decay_steps', max_iters)
+
+    print(f"--- Starting Training Loop (Decay starts at: {decay_start}) ---")
     train_losses, val_losses, iterations, eval_iterations = [], [], [], []
-
+    
     for iter_num in range(start_iter, max_iters):
+        if iter_num < decay_start:
+            active_step = min(iter_num, warmup_steps)
+        else:
+            active_step = iter_num - (decay_start - warmup_steps)
+
+        adjusted_decay_steps = lr_decay_steps - (decay_start - warmup_steps)
+        
         lr = compute_lr(
-            iter_num,
+            active_step,
             training_args['learning_rate'],
             training_args.get('min_lr', 0.0),
-            training_args.get('warmup_steps', 100),
-            training_args.get('lr_decay_steps', max_iters)
+            warmup_steps,
+            adjusted_decay_steps
         )
         for pg in optimizer.param_groups:
             pg['lr'] = lr
@@ -256,14 +268,15 @@ def train_loop():
         writer.add_scalar("Perplexity/train", train_ppl, iter_num)
         writer.add_scalar("LR", lr, iter_num)
         writer.add_scalar("GradNorm/total", total_norm, iter_num)
-
+        elapsed_min = (time.time() - start_time) / 60
+        
         if use_wandb:
             wandb.log({
                 "train/loss": iter_loss,
                 "train/perplexity": train_ppl,
                 "lr": lr,
                 "grad_norm": total_norm,
-                "iter": iter_num
+                "iter": iter_num,
             }, step=iter_num)
 
         if iter_num % training_args.get('log_interval', 10) == 0:

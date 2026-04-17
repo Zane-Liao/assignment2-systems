@@ -28,7 +28,7 @@ volume = modal.Volume.from_name("llm-data", create_if_missing=True)
 def train_loop_wrapper():
     wandb_key = os.environ.get("WANDB_API_KEY", "")
     if not wandb_key:
-        raise RuntimeError("WANDB_API_KEY 没有从 Modal Secret 注入")
+        raise RuntimeError("")
     wandb.login(key=wandb_key)
 
     workdir = "/app/cs336_systems"
@@ -49,7 +49,7 @@ def train_loop_wrapper():
 
 
 @app.function(
-    gpu="B200",
+    gpu="H100",
     volumes={"/data": volume},
     timeout=60 * 60 * 24,
     secrets=[modal.Secret.from_name("wandb-secret")]

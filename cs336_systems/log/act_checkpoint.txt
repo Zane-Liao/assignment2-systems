@@ -1,0 +1,96 @@
+✔︎ JSON API formula_tap_migrations.jws.json
+✔︎ JSON API cask_tap_migrations.jws.json
+✔︎ JSON API cask.jws.json
+✔︎ JSON API formula.jws.json
+Saving residual: shape=torch.Size([4, 2048, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 80]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 80]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 1]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 2048]), dtype=torch.bool, grad_fn=None
+Saving residual: shape=torch.Size([4, 16, 2048, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 1]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 160, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 160, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 2048, 160]), dtype=torch.float32, grad_fn=None
+Total size of saved tensors in single TransformerBlock: 2629.31 MiB
+Saving residual: shape=torch.Size([4, 2048, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 80]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 80]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 1]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 2048]), dtype=torch.bool, grad_fn=None
+Saving residual: shape=torch.Size([4, 16, 2048, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 1]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 160, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 160, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 2048, 160]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 2560]), dtype=torch.float32, grad_fn=<torch.autograd.function.CompiledFunctionBackward object at 0x112891650>
+Saving residual: shape=torch.Size([2048, 80]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 80]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 1]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 2048]), dtype=torch.bool, grad_fn=None
+Saving residual: shape=torch.Size([4, 16, 2048, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 1]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 160, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 160, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 2048, 160]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 2560]), dtype=torch.float32, grad_fn=<torch.autograd.function.CompiledFunctionBackward object at 0x112892c50>
+Saving residual: shape=torch.Size([2048, 80]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 80]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 1]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 2048]), dtype=torch.bool, grad_fn=None
+Saving residual: shape=torch.Size([4, 16, 2048, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 1]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 160, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 160, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 2048, 160]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 2560]), dtype=torch.float32, grad_fn=<torch.autograd.function.CompiledFunctionBackward object at 0x112893350>
+Saving residual: shape=torch.Size([2048, 80]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 80]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 1]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([2048, 2048]), dtype=torch.bool, grad_fn=None
+Saving residual: shape=torch.Size([4, 16, 2048, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 1]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([8192, 10240]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 160, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 160, 2048]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([64, 2048, 160]), dtype=torch.float32, grad_fn=None
+Total size of saved tensors in four TransformerBlocks: 13146.56 MiB
+Saving residual: shape=torch.Size([0]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 2560]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([0]), dtype=torch.float32, grad_fn=None
+Saving residual: shape=torch.Size([4, 2048, 2560]), dtype=torch.float32, grad_fn=<torch.autograd.function.CompiledFunctionBackward object at 0x112891950>
+Total size of saved tensors in four TransformerBlocks with checkpointing: 13306.56 MiB

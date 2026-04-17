@@ -5,9 +5,10 @@ from typing import Type
 import torch
 import torch.distributed as dist
 
-from cs336_systems.flash_attention import FlashAttnAutogradFunction, TritonFlashAttentionAutogradFunction
+# from cs336_systems.flash_attention import FlashAttnAutogradFunction, TritonFlashAttentionAutogradFunction
 from cs336_systems.ddp_model import DDPIndividualParameters, BucketDDPIndividualParameters
 from cs336_systems.optimizer_share import OptimizerStateShare
+from cs336_systems.fsdp_model import FSDP
 
 
 def get_flashattention_autograd_function_pytorch() -> Type:
@@ -20,7 +21,7 @@ def get_flashattention_autograd_function_pytorch() -> Type:
         A class object (not an instance of the class)
     """
     # For example: return MyFlashAttnAutogradFunctionClass
-    return FlashAttnAutogradFunction
+    # return FlashAttnAutogradFunction
 
 
 def get_flashattention_autograd_function_triton() -> Type:
@@ -36,7 +37,7 @@ def get_flashattention_autograd_function_triton() -> Type:
         A class object (not an instance of the class)
     """
     # For example: return MyTritonFlashAttentionAutogradFunctionClass
-    return TritonFlashAttentionAutogradFunction
+    # return TritonFlashAttentionAutogradFunction
 
 
 def get_ddp_individual_parameters(module: torch.nn.Module) -> torch.nn.Module:
@@ -143,3 +144,51 @@ def get_sharded_optimizer(params, optimizer_cls: type, **kwargs) -> torch.optim.
         Instance of sharded optimizer.
     """
     return OptimizerStateShare(params, optimizer_cls, **kwargs)
+
+
+def get_fsdp(module: torch.nn.Module, compute_dtype: torch.dtype | None = None) -> torch.nn.Module:
+    """
+    Returns a torch.nn.Module container that handles
+    fully-sharded data parallel training, including weight sharding,
+    all-gather for forward/backward, and gradient reduce-scatter.
+
+    Args:
+        module: torch.nn.Module
+            Underlying model to wrap with FSDP.
+        compute_dtype: optional torch.dtype
+            If provided, weights are cast to this dtype before communication
+            and compute, saving bandwidth. Master weights stay in fp32.
+    Returns:
+        Instance of an FSDP class.
+    """
+    # For example: return FSDP(module, compute_dtype=compute_dtype)
+    return FSDP(module, compute_dtype=compute_dtype)
+
+
+def fsdp_on_after_backward(fsdp_model: torch.nn.Module, optimizer: torch.optim.Optimizer):
+    """
+    Code to run after the backward pass is completed, but before we take
+    an optimizer step.
+
+    Args:
+        fsdp_model: torch.nn.Module
+            FSDP-wrapped model.
+        optimizer: torch.optim.Optimizer
+            Optimizer being used with the FSDP-wrapped model.
+    """
+    # For example: fsdp_model.finish_gradient_synchronization()
+    return fsdp_model.finish_gradient_synchronization()
+
+
+def fsdp_gather_full_params(fsdp_model: torch.nn.Module) -> dict[str, torch.Tensor]:
+    """
+    All-gather sharded parameters from the FSDP model to reconstruct full
+    parameter tensors. Replicated parameters are returned as-is.
+
+    Args:
+        fsdp_model: torch.nn.Module
+            FSDP-wrapped model.
+    Returns:
+        State dictionary mapping parameter names to full (unsharded) tensors.
+    """
+    return fsdp_model

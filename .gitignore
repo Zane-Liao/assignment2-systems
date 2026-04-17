@@ -15,6 +15,7 @@ data/
 
 # Macos file
 .DS_Store
+*.pt
 
 # Vscode
 .vscode
