@@ -5,7 +5,7 @@ from typing import Type
 import torch
 import torch.distributed as dist
 
-# from cs336_systems.flash_attention import FlashAttnAutogradFunction, TritonFlashAttentionAutogradFunction
+from cs336_systems.flash_attention import FlashAttnAutogradFunction, TritonFlashAttentionAutogradFunction
 from cs336_systems.ddp_model import DDPIndividualParameters, BucketDDPIndividualParameters
 from cs336_systems.optimizer_share import OptimizerStateShare
 from cs336_systems.fsdp_model import FSDP
@@ -21,7 +21,7 @@ def get_flashattention_autograd_function_pytorch() -> Type:
         A class object (not an instance of the class)
     """
     # For example: return MyFlashAttnAutogradFunctionClass
-    # return FlashAttnAutogradFunction
+    return FlashAttnAutogradFunction
 
 
 def get_flashattention_autograd_function_triton() -> Type:
@@ -37,7 +37,7 @@ def get_flashattention_autograd_function_triton() -> Type:
         A class object (not an instance of the class)
     """
     # For example: return MyTritonFlashAttentionAutogradFunctionClass
-    # return TritonFlashAttentionAutogradFunction
+    return TritonFlashAttentionAutogradFunction
 
 
 def get_ddp_individual_parameters(module: torch.nn.Module) -> torch.nn.Module:
@@ -191,4 +191,4 @@ def fsdp_gather_full_params(fsdp_model: torch.nn.Module) -> dict[str, torch.Tens
     Returns:
         State dictionary mapping parameter names to full (unsharded) tensors.
     """
-    return fsdp_model
+    return  fsdp_model.gather_full_params()

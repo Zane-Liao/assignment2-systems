@@ -108,7 +108,10 @@ class Embedding(Module):
         Return:
             torch.Tensor
         """
-        return torch.embedding(self.weight, token_ids)
+        out = torch.embedding(self.weight, token_ids)
+        if out.dtype != self.weight.dtype:
+            out = out.to(self.weight.dtype)
+        return out
 
 
 # I refer to torch concise implementation
